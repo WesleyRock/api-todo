@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginTodoRequest;
+use App\Http\Requests\RegisterTodoRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 final class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterTodoRequest $request)
     {
-        $data = $request_ > validated();
+        $data = $request->validated();
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -30,7 +30,7 @@ final class AuthController extends Controller
         ], 201);
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginTodoRequest $request)
     {
         $credentials = $request->valited();
 
