@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTodoRequest extends FormRequest
+final class StoreTodoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,8 @@ class StoreTodoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tiltle' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ];
     }
 }

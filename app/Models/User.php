@@ -35,6 +35,11 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
+    public function todos()
+    {
+        return $this->hasMany(Todo::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -46,10 +51,5 @@ final class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function todos()
-    {
-        return $this->hasMany(Todo::class);
     }
 }
