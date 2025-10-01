@@ -13,7 +13,7 @@ final class LoginTodoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ final class LoginTodoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:6',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'E-mail é obrigatório.',
+            'email.email' => 'Formato de e-mail inválido.',
+            'password.required' => 'Senha obrigatória.',
+            'password.min' => 'A senha deve ter no mínimo 6 caracteres.',
         ];
     }
 }
