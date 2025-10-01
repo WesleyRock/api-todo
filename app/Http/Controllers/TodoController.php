@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TodoResource;
 
 final class TodoController extends Controller
 {
@@ -20,10 +21,9 @@ final class TodoController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $todos = $user->todos()->orderBy('created_at', 'desc')->get();
+        $todos = auth()->user()->todos()->orderBy('created_at', 'desc')->paginate(15);
 
-        return response()->json($todos);
+        return TodoResource::collection($todos);
     }
 
     /**
@@ -31,10 +31,9 @@ final class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
-        $data = $request->validated();
-        $todo = auth()->user()->todos()->create($data);
+        $todo = auth()->user()->todos()->create($request->validated());
 
-        return response()->json($todo, 201);
+        return new TodoResource($todo);
     }
 
     /**
@@ -44,7 +43,7 @@ final class TodoController extends Controller
     {
         $todo = auth()->user()->todos()->findOrFail($id);
 
-        return response()->json($todo);
+        return new TodoResource($todo);
     }
 
     /**
@@ -55,7 +54,7 @@ final class TodoController extends Controller
         $todo = auth()->user()->todos()->findOrFail($id);
         $todo->update($request->validated());
 
-        return response()->json($todo);
+        return new TodoResource($todo);;
     }
 
     /**
@@ -74,7 +73,7 @@ final class TodoController extends Controller
         $todo = auth()->user()->todos()->findOrFail($id);
         $todo->completed = ! $todo->completed;
         $todo->save();
-
-        return response()->json($todo);
+        
+        return new TodoResource($todo);
     }
 }
