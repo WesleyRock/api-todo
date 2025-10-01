@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\TodoResource;
+use App\Models\Todo;
 
 final class TodoController extends Controller
 {
@@ -41,7 +41,8 @@ final class TodoController extends Controller
      */
     public function show(string $id)
     {
-        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo = Todo::findOrFail($id);
+        $this->authorize('view', $todo);
 
         return new TodoResource($todo);
     }
@@ -51,10 +52,11 @@ final class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, string $id)
     {
-        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo = Todo::findOrFail($id);
+        $this->authorize('update', $todo);
         $todo->update($request->validated());
 
-        return new TodoResource($todo);;
+        return new TodoResource($todo);
     }
 
     /**
@@ -62,7 +64,8 @@ final class TodoController extends Controller
      */
     public function destroy(string $id)
     {
-        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo = Todo::findOrFail($id);
+        $this->authorize('delete', $todo);
         $todo->delete();
 
         return response()->json(null, 204);
@@ -70,10 +73,11 @@ final class TodoController extends Controller
 
     public function toggle(string $id)
     {
-        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo = Todo::findOrFail($id);
+        $this->authorize('update', $todo);
         $todo->completed = ! $todo->completed;
         $todo->save();
-        
+
         return new TodoResource($todo);
     }
 }
