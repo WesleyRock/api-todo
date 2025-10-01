@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
-use App\Models\Todo;
 
 final class TodoController extends Controller
 {
     public function _construct()
     {
-      $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -21,10 +19,10 @@ final class TodoController extends Controller
      */
     public function index()
     {
-      $user = auth()->user();
-      $todos = $user->todos()->orderBy('created_at', 'desc')->get();
+        $user = auth()->user();
+        $todos = $user->todos()->orderBy('created_at', 'desc')->get();
 
-      return response()->json($todos);
+        return response()->json($todos);
     }
 
     /**
@@ -32,10 +30,10 @@ final class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
-      $data = $request->validated();
-      $todo = auth()->user()->todos()->create($data);
+        $data = $request->validated();
+        $todo = auth()->user()->todos()->create($data);
 
-      return response()->json($todo, 201);
+        return response()->json($todo, 201);
     }
 
     /**
@@ -51,12 +49,12 @@ final class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTodoRquest $request, string $id)
+    public function update(UpdateTodoRequest $request, string $id)
     {
-      $todo = auth()->user()->todos()->findOrFail($id);
-      $todo = update($request->validated());
+        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo = update($request->validated());
 
-      return response()->json($todo);
+        return response()->json($todo);
     }
 
     /**
@@ -64,18 +62,18 @@ final class TodoController extends Controller
      */
     public function destroy(string $id)
     {
-      $todo = auth()->user()->todos()->findOrFail($id);
-      $todo->delete();
+        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo->delete();
 
-      return response()->json(null, 204);
+        return response()->json(null, 204);
     }
 
     public function toggle(string $id)
     {
-      $todo = auth()->user()->todos()->findOrFail($id);
-      $todo->completed = ! $todo->completed;
-      $todo->save();
+        $todo = auth()->user()->todos()->findOrFail($id);
+        $todo->completed = ! $todo->completed;
+        $todo->save();
 
-      return response()->json($todo);
+        return response()->json($todo);
     }
-  }
+}

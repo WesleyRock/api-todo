@@ -17,8 +17,8 @@ final class Todo extends Model
         'completed',
     ];
 
-    protected $cast = [
-        'completed' => boolean,
+    protected $casts = [
+        'completed' => 'boolean',
     ];
 
     public function user()
