@@ -4,7 +4,61 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 final class AuthController extends Controller
 {
-    //
+    public function register(RegisterRequest $request)
+    {
+      $data = $request_>validated();
+      $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+      ]);
+
+      $token = auth('api')->login($user);
+
+      return response()->json([
+        'user' => $user,
+        'token' => $token,
+        'token_type' => 'baerer',
+        'expires_in' => auth('api')->factory()->getTTL() * 60
+      ], 201);
+    }
+
+    public function login(LoginRequest $request)
+    {
+      $credentials = $request->valited();
+
+      if (!$token = auth('api')->attemp($credentials)) {
+        return response()->json(['message' => 'Credencials invalidas'], 401);
+      }
+
+      return $this->respondWithToken($token);
+    }
+
+    public function logout()
+    {
+      auth('api')->logout();
+      return reponse()->json(['message' => 'Desconectado com sucesso']);
+    }
+
+    public function me()
+    {
+      return reponse()->json(auth('api')->user());
+    }
+
+    protected function respondWithToken($token)
+    {
+      return response()->json([
+        'access_token' => $token,
+        'token_type' => 'bearer',
+        'expires_in' => auth('api')->factory()->getTTL * 60
+      ]);
+    }
 }
