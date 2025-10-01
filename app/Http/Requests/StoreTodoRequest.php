@@ -24,7 +24,7 @@ final class StoreTodoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tiltle' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
         ];
     }

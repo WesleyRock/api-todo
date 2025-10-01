@@ -32,9 +32,9 @@ final class AuthController extends Controller
 
     public function login(LoginTodoRequest $request)
     {
-        $credentials = $request->valited();
+        $credentials = $request->validated();
 
-        if (! $token = auth('api')->attemp($credentials)) {
+        if (! $token = auth('api')->attempt($credentials)) {
             return response()->json(['message' => 'Credencials invalidas'], 401);
         }
 
@@ -45,12 +45,12 @@ final class AuthController extends Controller
     {
         auth('api')->logout();
 
-        return reponse()->json(['message' => 'Desconectado com sucesso']);
+        return response()->json(['message' => 'Desconectado com sucesso']);
     }
 
     public function me()
     {
-        return reponse()->json(auth('api')->user());
+        return response()->json(auth('api')->user());
     }
 
     protected function respondWithToken($token)
@@ -58,7 +58,7 @@ final class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL * 60,
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
         ]);
     }
 }

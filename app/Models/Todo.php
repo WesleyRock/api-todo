@@ -12,7 +12,7 @@ final class Todo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tiltle',
+        'title',
         'description',
         'completed',
     ];

@@ -6,10 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
+use App\Http\Controllers\Controller;
 
 final class TodoController extends Controller
 {
-    public function _construct()
+    public function __construct()
     {
         $this->middleware('auth:api');
     }
@@ -52,7 +53,7 @@ final class TodoController extends Controller
     public function update(UpdateTodoRequest $request, string $id)
     {
         $todo = auth()->user()->todos()->findOrFail($id);
-        $todo = update($request->validated());
+        $todo->update($request->validated());
 
         return response()->json($todo);
     }
