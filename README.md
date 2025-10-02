@@ -34,6 +34,8 @@
     cp .env.example .env
   Abra o arquivo .env e configure o banco de dados:
 
+  (ATENÇÃO: O usuario do banco tem que ser caching_sha2_password e todo os privilegios)
+
   env
   DB_CONNECTION=mysql
   DB_HOST=127.0.0.1
